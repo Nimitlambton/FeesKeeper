@@ -1,6 +1,5 @@
 package com.example.labtest1.feeskeeper.nimit.DBConfig
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -17,6 +16,10 @@ interface Feedao {
 
     @Query("SELECT * FROM Feedesc")
     fun getGenders(): List<Feedesc>
+
+    @Query("DELETE FROM Feedesc")
+    fun delete()
+
 
 }
 

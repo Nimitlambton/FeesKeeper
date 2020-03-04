@@ -6,16 +6,26 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import com.example.labtest1.feeskeeper.nimit.DBConfig.AppDatabase
+import com.example.labtest1.feeskeeper.nimit.DBConfig.Feedao
+import com.example.labtest1.feeskeeper.nimit.DBConfig.Feedesc
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import java.util.ArrayList
 
 
 class MainActivity : AppCompatActivity() {
+
+
+    private var db: AppDatabase? = null
+    private var genderDao: Feedao? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
 
     }
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -45,6 +55,43 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+
+
+    private  fun populateDatabase(){
+
+
+
+
+
+        Observable.fromCallable({
+            db = AppDatabase.getAppDataBase(context = this)
+            genderDao = db?.feedao()
+
+            with(genderDao){
+
+            }
+
+            db?.feedao()?.getGenders()
+
+        }).doOnNext({
+                list ->
+
+            var finalString = ""
+            list?.map {
+                finalString+= it.Cname+"\n"+it.age+"\n"+it.Cid
+            }
+            System.out.println(finalString)
+            val animals: ArrayList<String> = ArrayList()
+
+
+            finish()
+        }).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe()
+
+
+
+    }
 
 
 }

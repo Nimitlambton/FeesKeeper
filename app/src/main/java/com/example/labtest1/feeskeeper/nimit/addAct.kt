@@ -14,6 +14,7 @@ import com.example.labtest1.feeskeeper.nimit.DBConfig.Feedesc
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.activity_add.view.*
 import java.util.*
 
 
@@ -28,6 +29,7 @@ class addAct : AppCompatActivity() {
         setContentView(R.layout.activity_add)
         title = "add Details"
         var  Name = findViewById(R.id.username) as EditText
+        //var newName = .
         var  Fees = findViewById(R.id.fee) as EditText
         var  Age = findViewById(R.id.age) as EditText
         var  date = findViewById(R.id.date) as EditText
@@ -60,6 +62,7 @@ class addAct : AppCompatActivity() {
 
         }
 
+
             add.setOnClickListener{
 
                 Observable.fromCallable({
@@ -67,7 +70,7 @@ class addAct : AppCompatActivity() {
                     genderDao = db?.feedao()
 
 
-                    var gender1 = Feedesc(0,"nimit",9)
+                    var gender1 = Feedesc(0, Name.text.toString(),Age.text.toString().toInt())
 
                     with(genderDao){
 
@@ -79,8 +82,13 @@ class addAct : AppCompatActivity() {
                         list ->
 
                     var finalString = ""
-                    list?.map { finalString+= it.Cname+" - " }
+                    list?.map {
+                        finalString+= it.Cname+"\n"+it.age+"\n"+it.Cid
+                    }
                     System.out.println(finalString)
+                    val animals: ArrayList<String> = ArrayList()
+
+
                     finish()
                 }).subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -88,43 +96,6 @@ class addAct : AppCompatActivity() {
 
 
         }
-
-
-
-
-
-
-
-//
-//        Observable.From  ({
-//
-//            db = AppDatabase.getAppDataBase(context = this)
-//
-//            genderDao = db?.feedao()
-//
-//
-//            var gender1 = Feedesc(0,"nimit",9)
-//            var gender2 = Feedesc(1,"amit",7)
-//
-//            with(genderDao){
-//
-//                this?.insertdesc(gender1)
-//                //this?.insertGender(gender2)
-//            }
-//            db?.genderDao()?.getGenders()
-//        }).doOnNext({ list ->
-//            var finalString = ""
-//            list?.map { finalString+= it.name+" - " }
-//            tv_message.text = finalString
-//
-//        }).subscribeOn(Schedulers.io())
-//            .observeOn(AndroidSchedulers.mainThread())
-//            .subscribe()
-
-
-
-
-
 
 
     }
