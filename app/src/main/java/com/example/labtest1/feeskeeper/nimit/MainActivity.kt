@@ -1,25 +1,28 @@
 package com.example.labtest1.feeskeeper.nimit
 
-import android.app.Application
+
+import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import com.example.labtest1.feeskeeper.nimit.DBConfig.AppDatabase
-import com.example.labtest1.feeskeeper.nimit.DBConfig.Feedao
-import com.example.labtest1.feeskeeper.nimit.DBConfig.Feedesc
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
-import java.util.ArrayList
+import android.widget.Toast
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.labtest1.feeskeeper.nimit.dbConfig.Fee
+import com.example.labtest1.feeskeeper.nimit.dbConfig.feeViewModel
+import kotlinx.android.synthetic.main.activity_add.*
 
+private lateinit var wordViewModel: feeViewModel
 
 class MainActivity : AppCompatActivity() {
 
 
-    private var db: AppDatabase? = null
-    private var genderDao: Feedao? = null
+
+    private val newWordActivityRequestCode = 1
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,8 +30,26 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+
+        val recyclerView = findViewById<RecyclerView>(R.id.recyclerview)
+        val adapter = FeeListAdapter(this)
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(this)
+
+        wordViewModel = ViewModelProvider(this).get(feeViewModel::class.java)
+
+        wordViewModel.allfee.observe(this, Observer { words ->
+            // Update the cached copy of the words in the adapter.
+            words?.let { adapter.setWords(it)
+
+            }
+        })
+
+
     }
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
+
+
         // Inflate the menu; this adds items to the action bar if it is
             super.onCreateOptionsMenu(menu)
             menuInflater.inflate(R.menu.menu, menu)
@@ -42,56 +63,43 @@ class MainActivity : AppCompatActivity() {
         if (item.itemId == R.id.add){
             ShowaddDetails()
         }
+
+
         return super.onOptionsItemSelected(item)
     }
 
-
-
-
-
     private  fun  ShowaddDetails(){
-        val addIntent = Intent(this , addAct::class.java)
-        startActivity(addIntent)
-
+        val intent = Intent(this@MainActivity, addAct::class.java)
+       startActivityForResult(intent, newWordActivityRequestCode)
     }
 
 
 
-    private  fun populateDatabase(){
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
 
-
-
-
-
-        Observable.fromCallable({
-            db = AppDatabase.getAppDataBase(context = this)
-            genderDao = db?.feedao()
-
-            with(genderDao){
+        if (requestCode == newWordActivityRequestCode && resultCode == Activity.RESULT_OK) {
+            data?.getStringExtra(addAct.EXTRA_REPLY)?.let {
+                val word = Fee(0,it)
+                wordViewModel.insert(word)
 
             }
-
-            db?.feedao()?.getGenders()
-
-        }).doOnNext({
-                list ->
-
-            var finalString = ""
-            list?.map {
-                finalString+= it.Cname+"\n"+it.age+"\n"+it.Cid
-            }
-            System.out.println(finalString)
-            val animals: ArrayList<String> = ArrayList()
-
-
-            finish()
-        }).subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe()
-
-
-
+        } else {
+            Toast.makeText(
+                applicationContext,
+                R.string.empty_not_saved,
+                Toast.LENGTH_LONG).show()
+        }
     }
+
+
+
+
+
+
+
+
+
 
 
 }

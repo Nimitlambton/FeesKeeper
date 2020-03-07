@@ -1,35 +1,36 @@
 package com.example.labtest1.feeskeeper.nimit
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.DatePicker
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
-import com.example.labtest1.feeskeeper.nimit.DBConfig.AppDatabase
-import com.example.labtest1.feeskeeper.nimit.DBConfig.Feedao
-import com.example.labtest1.feeskeeper.nimit.DBConfig.Feedesc
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_add.view.*
+import com.example.labtest1.feeskeeper.nimit.dbConfig.feeViewModel
 import java.util.*
 
 
 class addAct : AppCompatActivity() {
 
-    private var db: AppDatabase? = null
-    private var genderDao: Feedao? = null
+    private lateinit var Name: EditText
+
+    companion object {
+        const val EXTRA_REPLY = "com.example.android.wordlistsql.REPLY"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add)
+
+
         title = "add Details"
-        var  Name = findViewById(R.id.username) as EditText
-        //var newName = .
+        Name = findViewById(R.id.username)
         var  Fees = findViewById(R.id.fee) as EditText
         var  Age = findViewById(R.id.age) as EditText
         var  date = findViewById(R.id.date) as EditText
@@ -65,37 +66,20 @@ class addAct : AppCompatActivity() {
 
             add.setOnClickListener{
 
-                Observable.fromCallable({
-                    db = AppDatabase.getAppDataBase(context = this)
-                    genderDao = db?.feedao()
+                val replyIntent = Intent()
+                if (TextUtils.isEmpty(Name.text)) {
 
+                    setResult(Activity.RESULT_CANCELED, replyIntent)
+                } else {
+                    val word = Name.text.toString()
+                    replyIntent.putExtra(EXTRA_REPLY, word)
+                    setResult(Activity.RESULT_OK, replyIntent)
 
-                    var gender1 = Feedesc(0, Name.text.toString(),Age.text.toString().toInt())
-
-                    with(genderDao){
-
-                        this?.insertdesc(gender1) }
-
-                    db?.feedao()?.getGenders()
-
-                }).doOnNext({
-                        list ->
-
-                    var finalString = ""
-                    list?.map {
-                        finalString+= it.Cname+"\n"+it.age+"\n"+it.Cid
-                    }
-                    System.out.println(finalString)
-                    val animals: ArrayList<String> = ArrayList()
-
-
-                    finish()
-                }).subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe()
-
-
+                }
+                finish()
         }
+
+
 
 
     }
