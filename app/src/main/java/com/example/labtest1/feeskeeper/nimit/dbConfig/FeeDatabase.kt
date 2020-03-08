@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 
 
 // Annotates class to be a Room Database with a table (entity) of the Word class
-@Database(entities = arrayOf(Fee::class), version = 1, exportSchema = false)
+@Database(entities = arrayOf(Fee::class), version = 2, exportSchema = false)
 
  abstract class FeeDatabase : RoomDatabase() {
 
@@ -55,7 +55,11 @@ import kotlinx.coroutines.launch
                     FeeDatabase::class.java,
                     "Fee_info_database"
                 )
+
+
+
                     .addCallback(WordDatabaseCallback(scope))
+                    . fallbackToDestructiveMigration()
                     .build()
                 INSTANCE = instance
                 // return instance

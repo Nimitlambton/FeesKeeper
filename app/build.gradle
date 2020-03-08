@@ -10,6 +10,8 @@ apply plugin: 'kotlin-android-extensions'
 
 
 android {
+
+
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
     defaultConfig {
@@ -32,6 +34,10 @@ android {
     }
 
 
+}
+
+androidExtensions {
+    experimental = true
 }
 
 dependencies {
@@ -92,6 +98,6 @@ dependencies {
     androidTestImplementation "androidx.arch.core:core-testing:$rootProject.coreTestingVersion"
 
 
-
+    apply plugin: 'org.jetbrains.kotlin.android.extensions'
 
 }

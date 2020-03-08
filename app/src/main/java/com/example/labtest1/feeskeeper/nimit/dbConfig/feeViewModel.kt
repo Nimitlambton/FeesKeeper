@@ -17,7 +17,9 @@ class feeViewModel(application: Application) : AndroidViewModel(application) {
     val allfee: LiveData<List<Fee>>
 
     init {
-        // Gets reference to WordDao from WordRoomDatabase to construct
+
+
+           // Gets reference to WordDao from WordRoomDatabase to construct
         // the correct WordRepository.
 
         val FeeDao = FeeDatabase.getDatabase(application, viewModelScope).feeDao()

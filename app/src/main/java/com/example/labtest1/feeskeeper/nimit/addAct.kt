@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Parcelable
 import android.text.TextUtils
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -11,6 +12,8 @@ import android.widget.Button
 import android.widget.DatePicker
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
+import com.example.labtest1.feeskeeper.nimit.dbConfig.Fee
 import com.example.labtest1.feeskeeper.nimit.dbConfig.feeViewModel
 import java.util.*
 
@@ -18,6 +21,9 @@ import java.util.*
 class addAct : AppCompatActivity() {
 
     private lateinit var Name: EditText
+    private lateinit var wordViewModel: feeViewModel
+
+    val resultCode = 0;
 
     companion object {
         const val EXTRA_REPLY = "com.example.android.wordlistsql.REPLY"
@@ -29,6 +35,9 @@ class addAct : AppCompatActivity() {
         setContentView(R.layout.activity_add)
 
 
+        wordViewModel = ViewModelProvider(this).get(feeViewModel::class.java)
+
+
         title = "add Details"
         Name = findViewById(R.id.username)
         var  Fees = findViewById(R.id.fee) as EditText
@@ -38,6 +47,11 @@ class addAct : AppCompatActivity() {
 
 
         val datePicker = findViewById<DatePicker>(R.id.datePicker1)
+
+
+
+
+
 
         datePicker.visibility = View.INVISIBLE
 
@@ -67,13 +81,21 @@ class addAct : AppCompatActivity() {
             add.setOnClickListener{
 
                 val replyIntent = Intent()
-                if (TextUtils.isEmpty(Name.text)) {
+
+                if (TextUtils.isEmpty(Name.text) && TextUtils.isEmpty(Fees.text) && TextUtils.isEmpty(Age.text) && TextUtils.isEmpty(date.text)  ) {
 
                     setResult(Activity.RESULT_CANCELED, replyIntent)
+
                 } else {
-                    val word = Name.text.toString()
-                    replyIntent.putExtra(EXTRA_REPLY, word)
+
+                    var word2 = Fee(0,Name.text.toString(),Fees.text.toString().toInt(),Age.text.toString().toInt(),date.text.toString().toLong())
+
+                    replyIntent.putExtra(EXTRA_REPLY, Name.text.toString())
                     setResult(Activity.RESULT_OK, replyIntent)
+
+                    wordViewModel.insert(word2)
+
+
 
                 }
                 finish()

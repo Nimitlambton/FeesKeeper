@@ -23,7 +23,11 @@ import com.example.labtest1.feeskeeper.nimit.dbConfig.Fee
 
     override fun onBindViewHolder(holder: WordViewHolder, position: Int) {
         val current = fee[position]
-        holder.wordItemView.text = current.user_name + current.u_id
+        holder.wordItemView.text = "Username ="+current.user_name + "\n " +
+                                    "user_Id = " +current.u_id +
+                                    "\n Amount ="+ current.feeamount +
+                                      "\nAge ="+current.user_age +
+                                     "\nDate ="+current.date
 
 
     }

@@ -9,9 +9,6 @@ class feeRepo(private val feeDao: FeeDao) {
     val allData: LiveData<List<Fee>> = feeDao.getalldata()
 
     suspend fun insert(fee: Fee) {
-
         feeDao.insert(fee)
-
-
     }
 }
