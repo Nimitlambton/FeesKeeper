@@ -40,4 +40,14 @@ class feeViewModel(application: Application) : AndroidViewModel(application) {
 
         repository.insert(fee)
     }
+    fun delete(id: Int) = viewModelScope.launch {
+
+        repository.del(id)
+
+    }
+
+
+
+
+
 }

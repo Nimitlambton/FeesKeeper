@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.Parcelable
 import android.text.TextUtils
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -88,14 +87,13 @@ class addAct : AppCompatActivity() {
 
                 } else {
 
-                    var word2 = Fee(0,Name.text.toString(),Fees.text.toString().toInt(),Age.text.toString().toInt(),date.text.toString().toLong())
+                    val newdate: String = date.text.toString()
+                    var word2 = Fee(0,Name.text.toString(),Fees.text.toString().toInt(),Age.text.toString().toInt(),newdate)
 
                     replyIntent.putExtra(EXTRA_REPLY, Name.text.toString())
                     setResult(Activity.RESULT_OK, replyIntent)
 
                     wordViewModel.insert(word2)
-
-
 
                 }
                 finish()

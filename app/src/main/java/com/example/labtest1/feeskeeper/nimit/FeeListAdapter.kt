@@ -8,39 +8,77 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.labtest1.feeskeeper.nimit.dbConfig.Fee
 
- class FeeListAdapter internal constructor(
-    context: Context
-) : RecyclerView.Adapter<FeeListAdapter.WordViewHolder>() {
 
-    private val inflater: LayoutInflater = LayoutInflater.from(context)
-    private var fee = emptyList<Fee>() // Cached copy of words
+class FeeListAdapter internal constructor(context: Context , var bo : onfeeclick ) : RecyclerView.Adapter<FeeListAdapter.WordViewHolder>() {
 
-    inner class WordViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        val wordItemView: TextView = itemView.findViewById(R.id.textView)
+    private var feel = emptyList<Fee>() // Cached copy of words
+
+     class WordViewHolder(itemView: View ) : RecyclerView.ViewHolder(itemView) {
+
+         val wordItemView: TextView = itemView.findViewById(R.id.textView)
+
+
+         fun initizliaze(bc: Fee , action: onfeeclick ){
+
+
+             wordItemView.text = "Username ="+bc.user_name + "\n " +
+                     "user_Id = " +bc.u_id +
+                     "\n Amount ="+ bc.feeamount +
+                     "\nAge ="+bc.user_age +
+                     "\nDate ="+bc.date
+
+            itemView.setOnClickListener{
+
+                 action.onitemclick(bc,adapterPosition)
+
+             }
+
+         }
+
 
     }
 
     override fun onBindViewHolder(holder: WordViewHolder, position: Int) {
-        val current = fee[position]
-        holder.wordItemView.text = "Username ="+current.user_name + "\n " +
-                                    "user_Id = " +current.u_id +
-                                    "\n Amount ="+ current.feeamount +
-                                      "\nAge ="+current.user_age +
-                                     "\nDate ="+current.date
+
+        val current = feel[position]
+       holder.initizliaze(current,bo)
+
 
 
     }
 
     internal fun setWords(fee: List<Fee>) {
-        this.fee = fee
+        this.feel = fee
         notifyDataSetChanged()
     }
 
-    override fun getItemCount() = fee.size
+    override fun getItemCount() = feel.size
+
      override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WordViewHolder {
 
-         val itemView = inflater.inflate(R.layout.list_item, parent, false)
-         return WordViewHolder(itemView)
+
+
+         return WordViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.list_item,parent,false))
+
+
+
      }
- }
+
+
+
+}
+
+
+
+
+
+
+
+interface onfeeclick{
+
+fun  onitemclick(item:Fee , position: Int)
+
+}
+
+

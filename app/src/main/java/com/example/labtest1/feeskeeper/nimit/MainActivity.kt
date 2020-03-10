@@ -20,7 +20,7 @@ import com.example.labtest1.feeskeeper.nimit.dbConfig.feeViewModel
 
 private lateinit var wordViewModel: feeViewModel
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity() , onfeeclick {
 
 
 
@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
 
 
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerview)
-        val adapter = FeeListAdapter(this)
+        val adapter = FeeListAdapter(this,this)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 
@@ -102,6 +102,18 @@ class MainActivity : AppCompatActivity() {
                 Toast.LENGTH_LONG
             ).show()
         }
+    }
+
+    override fun onitemclick(item: Fee, position: Int) {
+
+
+        Toast.makeText(this,item.user_name + "deleted",Toast.LENGTH_SHORT).show()
+
+
+
+        wordViewModel.delete(item.u_id)
+
+
     }
 }
 

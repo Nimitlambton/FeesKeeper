@@ -3,16 +3,16 @@ package com.example.labtest1.feeskeeper.nimit.dbConfig
 import android.annotation.TargetApi
 import android.content.Context
 import android.os.Build
-import androidx.room.Database
-import androidx.room.Room
-import androidx.room.RoomDatabase
+import androidx.room.*
 import androidx.sqlite.db.SupportSQLiteDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import java.util.*
 
 
 // Annotates class to be a Room Database with a table (entity) of the Word class
-@Database(entities = arrayOf(Fee::class), version = 2, exportSchema = false)
+@Database(entities = arrayOf(Fee::class), version = 3, exportSchema = false)
+
 
  abstract class FeeDatabase : RoomDatabase() {
 
@@ -28,9 +28,10 @@ import kotlinx.coroutines.launch
 
             INSTANCE?.let { database ->
                 scope.launch {
+
                     var fee = database.feeDao()
                     // Delete all content here.
-                    fee.deleteAll()
+                   // fee.deleteAll()
 
 
 
@@ -55,8 +56,6 @@ import kotlinx.coroutines.launch
                     FeeDatabase::class.java,
                     "Fee_info_database"
                 )
-
-
 
                     .addCallback(WordDatabaseCallback(scope))
                     . fallbackToDestructiveMigration()

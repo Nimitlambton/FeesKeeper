@@ -11,11 +11,17 @@ interface FeeDao {
     //get all data
     @Query("SELECT * from fee_info")
     fun getalldata(): LiveData<List<Fee>>
+
     //insert all data
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(fee : Fee)
+
     //Delete all data
     @Query("DELETE FROM fee_info")
     suspend fun deleteAll()
+
+    @Query("DELETE FROM fee_info WHERE user_id = :userId")
+    suspend fun deleteByUserId(userId: Int)
+
 
 }

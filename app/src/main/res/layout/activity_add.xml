@@ -107,6 +107,7 @@
         android:layout_marginRight="64dp"
         android:ems="10"
         android:inputType="date"
+        android:focusable="false"
         app:layout_constraintBaseline_toBaselineOf="@+id/textView5"
         app:layout_constraintEnd_toEndOf="parent"
         />
